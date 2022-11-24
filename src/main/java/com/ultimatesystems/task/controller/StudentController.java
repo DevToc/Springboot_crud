@@ -1,5 +1,6 @@
 package com.ultimatesystems.task.controller;
 
+import com.ultimatesystems.task.entity.Pagination;
 import com.ultimatesystems.task.entity.Student;
 import com.ultimatesystems.task.entity.Teacher;
 import com.ultimatesystems.task.service.PersonService;
@@ -28,9 +29,9 @@ public class StudentController {
     }
 
     @GetMapping(value = "all")
-    public List<Student> getElements(@PathVariable("page") Integer page, @PathVariable("sort") String sort) {
+    public List<Student> getElements(@RequestBody Pagination pagination) {
 
-        return personService.getStudents(page, sort);
+        return personService.getStudents(pagination);
     }
 
     @PostMapping(value = "search/{keyword}/{name}")

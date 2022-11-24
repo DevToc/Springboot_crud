@@ -2,6 +2,7 @@ package com.ultimatesystems.task.service;
 
 import java.util.List;
 
+import com.ultimatesystems.task.entity.Pagination;
 import com.ultimatesystems.task.entity.Person;
 import com.ultimatesystems.task.entity.Student;
 import com.ultimatesystems.task.entity.Teacher;
@@ -12,7 +13,7 @@ public interface PersonService {
 
     // Student
 
-    List<Student> getStudents(Integer page, String sort);
+    List<Student> getStudents(Pagination pagination);
 
     List<Teacher> getMyTeachers(Long id);
 
@@ -32,7 +33,7 @@ public interface PersonService {
 
     // Teacher
 
-    List<Teacher> getTeachers();
+    List<Teacher> getTeachers(Pagination pagination);
 
     List<Teacher> searchTeacher(String keyword, String name);
 

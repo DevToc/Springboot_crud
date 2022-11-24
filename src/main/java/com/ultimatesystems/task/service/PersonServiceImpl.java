@@ -2,15 +2,19 @@ package com.ultimatesystems.task.service;
 
 import com.ultimatesystems.task.dao.StudentRepository;
 import com.ultimatesystems.task.dao.TeacherRepository;
+import com.ultimatesystems.task.entity.Pagination;
 import com.ultimatesystems.task.entity.Person;
 import com.ultimatesystems.task.entity.Student;
 import com.ultimatesystems.task.entity.Teacher;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.apache.commons.validator.routines.EmailValidator;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -41,12 +45,44 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public List<Teacher> getTeachers() {
-        try {
-            return teacherRepository.findAll();
-        } catch (Exception e) {
-            throw e;
+    public List<Teacher> getTeachers(Pagination pagination) {
+
+        if (pagination.pageNo == 0) {
+
+            if (pagination.sortKey.equals(""))
+                return teacherRepository.findAll();
+            else
+                return teacherRepository.findAll(Sort.by(pagination.sortKey));
+        } else {
+            if (pagination.pageSize == 0) {
+
+                if (pagination.sortKey.equals("")) {
+
+                    Pageable paging = PageRequest.of(pagination.pageNo - 1, 5);
+                    Page<Teacher> pagedTeachers = teacherRepository.findAll(paging);
+                    return pagedTeachers.toList();
+                } else {
+
+                    Pageable paging = PageRequest.of(pagination.pageNo - 1, 5, Sort.by(pagination.sortKey));
+                    Page<Teacher> pagedTeachers = teacherRepository.findAll(paging);
+                    return pagedTeachers.toList();
+                }
+            } else {
+                if (pagination.sortKey.equals("")) {
+
+                    Pageable paging = PageRequest.of(pagination.pageNo - 1, pagination.pageSize);
+                    Page<Teacher> pagedTeachers = teacherRepository.findAll(paging);
+                    return pagedTeachers.toList();
+                } else {
+
+                    Pageable paging = PageRequest.of(pagination.pageNo - 1, pagination.pageSize,
+                            Sort.by(pagination.sortKey));
+                    Page<Teacher> pagedTeachers = teacherRepository.findAll(paging);
+                    return pagedTeachers.toList();
+                }
+            }
         }
+
     }
 
     @Override
@@ -142,10 +178,44 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public List<Student> getStudents(Integer page, String sort) {
-        List<Student> students = new ArrayList<Student>();
-        studentRepository.findAll().forEach(students::add);
-        return students;
+    public List<Student> getStudents(Pagination pagination) {
+
+        if (pagination.pageNo == 0) {
+
+            if (pagination.sortKey.equals(""))
+                return studentRepository.findAll();
+            else
+                return studentRepository.findAll(Sort.by(pagination.sortKey));
+        } else {
+            if (pagination.pageSize == 0) {
+
+                if (pagination.sortKey.equals("")) {
+
+                    Pageable paging = PageRequest.of(pagination.pageNo - 1, 5);
+                    Page<Student> pagedStudent = studentRepository.findAll(paging);
+                    return pagedStudent.toList();
+                } else {
+
+                    Pageable paging = PageRequest.of(pagination.pageNo - 1, 5, Sort.by(pagination.sortKey));
+                    Page<Student> pagedStudent = studentRepository.findAll(paging);
+                    return pagedStudent.toList();
+                }
+            } else {
+                if (pagination.sortKey.equals("")) {
+
+                    Pageable paging = PageRequest.of(pagination.pageNo - 1, pagination.pageSize);
+                    Page<Student> pagedStudent = studentRepository.findAll(paging);
+                    return pagedStudent.toList();
+                } else {
+
+                    Pageable paging = PageRequest.of(pagination.pageNo - 1, pagination.pageSize,
+                            Sort.by(pagination.sortKey));
+                    Page<Student> pagedStudent = studentRepository.findAll(paging);
+                    return pagedStudent.toList();
+                }
+            }
+        }
+
     }
 
     @Override
