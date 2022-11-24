@@ -6,6 +6,7 @@ import com.ultimatesystems.task.entity.Person;
 import com.ultimatesystems.task.entity.Student;
 import com.ultimatesystems.task.entity.Teacher;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,7 +42,56 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public List<Teacher> getTeachers() {
-        return teacherRepository.findAll();
+        try {
+            return teacherRepository.findAll();
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    @Override
+    public List<Teacher> searchTeacher(String keyword, String name) {
+        if (keyword.equals("firstname")) {
+
+            return teacherRepository.findByFirstName(name);
+        } else
+            return teacherRepository.findByLastName(name);
+    }
+
+    @Override
+
+    public Teacher findTeacher(Long id) {
+        Optional<Teacher> tch = teacherRepository.findById(id);
+        if (tch.isEmpty()) {
+            return null;
+        } else {
+            return tch.get();
+        }
+    }
+
+    @Override
+    public List<Student> getMyStudents(Long id) {
+        return studentRepository.findStudentsByteachersId(id);
+    }
+
+    @Override
+    public String addStudent(Long id, Long studentId) {
+        Teacher tch = findTeacher(id);
+        Student std = findStudent(studentId);
+        tch.addStudent(std);
+        teacherRepository.save(tch);
+        studentRepository.save(std);
+        return "Successfully added student";
+    }
+
+    @Override
+    public String deleteStudent(Long id, Long studentId) {
+        Teacher tch = findTeacher(id);
+        Student std = findStudent(studentId);
+        tch.removeStudent(std);
+        teacherRepository.save(tch);
+        studentRepository.save(std);
+        return "Successfully deleted student";
     }
 
     @Override
@@ -92,8 +142,55 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public List<Student> getStudents() {
-        return studentRepository.findAll();
+    public List<Student> getStudents(Integer page, String sort) {
+        List<Student> students = new ArrayList<Student>();
+        studentRepository.findAll().forEach(students::add);
+        return students;
+    }
+
+    @Override
+    public List<Student> searchStudent(String keyword, String name) {
+        if (keyword.equals("firstname")) {
+
+            return studentRepository.findByFirstName(name);
+        } else
+            return studentRepository.findByLastName(name);
+    }
+
+    @Override
+
+    public Student findStudent(Long id) {
+        Optional<Student> std = studentRepository.findById(id);
+        if (std.isEmpty()) {
+            return null;
+        } else {
+            return std.get();
+        }
+    }
+
+    @Override
+    public List<Teacher> getMyTeachers(Long id) {
+        return teacherRepository.findTeachersBystudentsId(id);
+    }
+
+    @Override
+    public String addTeacher(Long id, Long teacherId) {
+        Teacher tch = findTeacher(teacherId);
+        Student std = findStudent(id);
+        tch.addStudent(std);
+        teacherRepository.save(tch);
+        studentRepository.save(std);
+        return "Successfully added Teacher";
+    }
+
+    @Override
+    public String deleteTeacher(Long id, Long teacherId) {
+        Teacher tch = findTeacher(teacherId);
+        Student std = findStudent(id);
+        tch.removeStudent(std);
+        teacherRepository.save(tch);
+        studentRepository.save(std);
+        return "Successfully deleted Teacher";
     }
 
     @Override

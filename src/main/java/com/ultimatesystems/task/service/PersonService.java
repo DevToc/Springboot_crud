@@ -12,7 +12,17 @@ public interface PersonService {
 
     // Student
 
-    List<Student> getStudents();
+    List<Student> getStudents(Integer page, String sort);
+
+    List<Teacher> getMyTeachers(Long id);
+
+    String addTeacher(Long id, Long teacherId);
+
+    String deleteTeacher(Long id, Long teacherId);
+
+    List<Student> searchStudent(String keyword, String name);
+
+    Student findStudent(Long id);
 
     String createStudent(Student student);
 
@@ -23,6 +33,16 @@ public interface PersonService {
     // Teacher
 
     List<Teacher> getTeachers();
+
+    List<Teacher> searchTeacher(String keyword, String name);
+
+    List<Student> getMyStudents(Long id);
+
+    String addStudent(Long id, Long studentId);
+
+    String deleteStudent(Long id, Long studentId);
+
+    Teacher findTeacher(Long id);
 
     String createTeacher(Teacher teacher);
 

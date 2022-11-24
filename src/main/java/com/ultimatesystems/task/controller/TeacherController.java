@@ -1,5 +1,6 @@
 package com.ultimatesystems.task.controller;
 
+import com.ultimatesystems.task.entity.Student;
 import com.ultimatesystems.task.entity.Teacher;
 import com.ultimatesystems.task.service.PersonService;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +29,31 @@ public class TeacherController {
     public List<Teacher> getElements() {
 
         return personService.getTeachers();
+    }
+
+    @PostMapping(value = "search/{keyword}/{name}")
+    public List<Teacher> searchElement(@PathVariable("keyword") String keyword, @PathVariable("name") String name) {
+        return personService.searchTeacher(keyword, name);
+    }
+
+    @PostMapping(value = "{id}/students")
+    public List<Student> addStudent(@PathVariable("id") Long id) {
+
+        return personService.getMyStudents(id);
+    }
+
+    @PostMapping(value = "{id}/addStudent/{studentId}")
+    public String addStudent(@PathVariable("id") Long id,
+            @PathVariable("studentId") Long studentId) {
+
+        return personService.addStudent(id, studentId);
+    }
+
+    @PostMapping(value = "{id}/deleteStudent/{studentId}")
+    public String deleeStudent(@PathVariable("id") Long id,
+            @PathVariable("studentId") Long studentId) {
+
+        return personService.addStudent(id, studentId);
     }
 
     @PostMapping(value = "add")

@@ -1,6 +1,7 @@
 package com.ultimatesystems.task.controller;
 
 import com.ultimatesystems.task.entity.Student;
+import com.ultimatesystems.task.entity.Teacher;
 import com.ultimatesystems.task.service.PersonService;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/students")
+
 public class StudentController {
 
     private PersonService personService;
@@ -26,9 +28,34 @@ public class StudentController {
     }
 
     @GetMapping(value = "all")
-    public List<Student> getElements() {
+    public List<Student> getElements(@PathVariable("page") Integer page, @PathVariable("sort") String sort) {
 
-        return personService.getStudents();
+        return personService.getStudents(page, sort);
+    }
+
+    @PostMapping(value = "search/{keyword}/{name}")
+    public List<Student> searchElement(@PathVariable("keyword") String keyword, @PathVariable("name") String name) {
+        return personService.searchStudent(keyword, name);
+    }
+
+    @PostMapping(value = "{id}/teachers")
+    public List<Teacher> addTeacher(@PathVariable("id") Long id) {
+
+        return personService.getMyTeachers(id);
+    }
+
+    @PostMapping(value = "{id}/addTeacher/{teacherId}")
+    public String addTeacher(@PathVariable("id") Long id,
+            @PathVariable("teacherId") Long teacherId) {
+
+        return personService.addTeacher(id, teacherId);
+    }
+
+    @PostMapping(value = "{id}/deleteTeacher/{teacherId}")
+    public String deleteTeacher(@PathVariable("id") Long id,
+            @PathVariable("teacherId") Long teacherId) {
+
+        return personService.deleteTeacher(id, teacherId);
     }
 
     @PostMapping(value = "add")
